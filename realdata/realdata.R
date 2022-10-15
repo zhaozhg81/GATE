@@ -1,3 +1,4 @@
+library(GroupTest)
 library(MCMCpack)
 library(coda)
 library(lattice)
@@ -9,7 +10,6 @@ data(AYP)
 source("../R/GATE.R")
 source("../R/Gibbs_Dirichelet.R")
 
-fig_dir =  "../figure/realdata"
 
 
 
@@ -191,7 +191,7 @@ pi1.ini <- 0.5
   DELTA=0.001
 sigma.KNOWN=TRUE 
 
-esti <- GATE.em( data, pi1.ini, pi2.1.ini, L, muL.ini, sigmaL.ini, cL.ini, DELTA, sigma.KNOWN)
+esti <- GATE.em( AYP, pi1.ini, pi2.1.ini, L, muL.ini, sigmaL.ini, cL.ini, DELTA, sigma.KNOWN)
 AYP.em <- GATE.localfdr(AYP, esti$pi1, esti$pi2.1, L, esti$muL, esti$sigmaL, esti$cL)
 AYP.em <- GATE.1( AYP.em, alpha=0.05)
 
@@ -253,39 +253,37 @@ combined.keep$gbh <- DEC[ 2- combined.keep$gbh ]
 combined.keep$pooled <- DEC[ 2- combined.keep$pooled ]
 
 
-postscript(paste(fig_dir,"AYP_gate.eps",sep=""),  horizontal=FALSE)
 gplot.gate <- ggplot( combined.keep, aes(z, z.1, colour=gate,shape=gate ) ) + geom_point()
 gplot.gate <- gplot.gate + geom_hline(yintercept=2, linetype="dashed", color='black')
 gplot.gate <- gplot.gate + geom_hline(yintercept=-2, linetype="dashed", color='black')
 gplot.gate <- gplot.gate  + labs(x="AYP 2013") + labs(y="AYP 2015")
 gplot.gate
-dev.off()
 
-postscript(paste(fig_dir, "AYP_gate_em.eps",sep=""),  horizontal=FALSE)
+
 gplot.gate <- ggplot( combined.keep, aes(z, z.1, colour=gate.em,shape=gate.em ) ) + geom_point()
 gplot.gate <- gplot.gate + geom_hline(yintercept=2, linetype="dashed", color='black')
 gplot.gate <- gplot.gate + geom_hline(yintercept=-2, linetype="dashed", color='black')
 gplot.gate <- gplot.gate  + labs(x="AYP 2013") + labs(y="AYP 2015")
 gplot.gate
-dev.off()
 
 
-postscript( paste(fig_dir,"AYP_sc.eps",sep=""),  horizontal=FALSE)
+
+
 gplot.sc <- ggplot( combined.keep, aes(z, z.1, colour=sc,shape=sc ) ) + geom_point()
 gplot.sc <- gplot.sc + geom_hline(yintercept=2, linetype="dashed", color='black')
 gplot.sc <- gplot.sc + geom_hline(yintercept=-2, linetype="dashed", color='black')
 gplot.sc <- gplot.sc  + labs(x="AYP 2013") + labs(y="AYP 2015")
 gplot.sc
-dev.off()
 
 
-postscript(paste(fig_dir,"AYP_pooled.eps",sep=""),  horizontal=FALSE)
+
+
 gplot.pooled <- ggplot( combined.keep, aes(z, z.1, colour=pooled,shape=pooled ) ) + geom_point()
 gplot.pooled <- gplot.pooled + geom_hline(yintercept=2, linetype="dashed", color='black')
 gplot.pooled <- gplot.pooled + geom_hline(yintercept=-2, linetype="dashed", color='black')
 gplot.pooled <- gplot.pooled  + labs(x="AYP 2013") + labs(y="AYP 2015")
 gplot.pooled
-dev.off()
+
 
 ## combined.keep$naive <- combined.keep$pooled
 ## postscript("AYP_naive.eps",  horizontal=FALSE)
@@ -298,13 +296,13 @@ dev.off()
 
 
 
-postscript(paste(fig_dir,"AYP_gbh.eps",sep=""), horizontal=FALSE)
+
 gplot.gbh <- ggplot( combined.keep, aes(z, z.1, colour=gbh,shape=gbh ) ) + geom_point()
 gplot.gbh <- gplot.gbh + geom_hline(yintercept=2, linetype="dashed", color='black')
 gplot.gbh <- gplot.gbh + geom_hline(yintercept=-2, linetype="dashed", color='black')
 gplot.gbh <- gplot.gbh + labs(x="AYP 2013") + labs(y="AYP 2015")
 gplot.gbh
-dev.off()
+
 
 
 rej.ind.gate = which( combined.keep$gate=='rej')
